@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>ESP 데이터 기록 Firebase 앱</title>
+    <style>
+        #chart_div {
+            width: 1200px;
+            height: 500px;
+        }
+
+        #gauge_div {
+            height: 300px;
+        }
+
+        div {
+            display: table;
+            margin-right: auto;
+            margin-left: auto;
+        }
+    </style>
+    <!-- Firebase SDK 포함 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+    <!-- 필요한 Firebase 기능만 포함 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    // 웹 앱의 Firebase 구성
+    const firebaseConfig = {
+        apiKey: "AIzaSyBdCib1Kf28yUcY481joIVVpnY1kdxUSf4",
+        authDomain: "esp32-light-sensor-1d4ac.firebaseapp.com",
+        databaseURL: "https://esp32-light-sensor-1d4ac-default-rtdb.firebaseio.com",
+        projectId: "esp32-light-sensor-1d4ac",
+        storageBucket: "esp32-light-sensor-1d4ac.appspot.com",
+        messagingSenderId: "379814279957",
+        appId: "1:379814279957:web:5fda92ec607e9e063f871c"
+    };
+
+    // Firebase 초기화
+    firebase.initializeApp(firebaseConfig);
+
+    // 인증과 데이터베이스 참조 생성
+    // const auth = firebase.auth();
+    // const db = firebase.database();
+    const app = initializeApp(firebaseConfig);
+    </script>
+</head>
+<body>
+    <!-- 차트를 위한 컨테이너 -->
+    <div>
+        <div id="chart_div"></div>
+    </div>
+    <div>
+        <div id="gauge_div"></div>
+    </div>
+    <script type="text/javascript"
+            src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        // 현재 차트 패키지 로드
+        google.charts.load('current', {
+        packages: ['corechart', 'line', 'gauge'],
+        });
+		    // API가 로드되었을 때 콜백 함수 설정
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+    // 기본 값으로 데이터 객체 생성
+    let data = google.visualization.arrayToDataTable([
+    ['Time', 'Light Sensor'],
+    ["00:00", 0],
+    ]);
+
+    let gauge_data = google.visualization.arrayToDataTable([
+    ['Light Sensor'],
+    [0],
+    ]);
+
+    // 제목, 색상 등이 포함된 옵션 객체 생성
+    let options = {
+    max: 2048, //4096,
+    hAxis: {
+    //textPosition: 'none',
+    },
+    vAxis: {
+
+    },
+    };
+
+    // 차트 그리기
+    let chart = new google.visualization.LineChart(
+    document.getElementById('chart_div')
+    );
+    chart.draw(data, options);
+
+    let gauge_chart = new google.visualization.Gauge(
+        document.getElementById('gauge_div')
+    );
+    gauge_chart.draw(gauge_data, options);
+
+    // 데이터베이스 경로
+    var dbPath = 'room1';
+
+    // 데이터베이스 참조
+    var dbRef = firebase.database().ref(dbPath);
+
+    // 표시할 최대 데이터 행 수
+    let maxDatas = 50;
+
+    // 최신 측정값 가져와서 차트에 표시 (표시되는 측정값 수는 chartRange 값에 해당)
+    dbRef.orderByKey().limitToLast(maxDatas).on('child_added', snapshot =>{
+    var jsonData = snapshot.toJSON(); // 예: {lightsensor: 2502, timestamp:1641317355}
+
+    // 값 저장
+    var lightsensor = Number(jsonData.lightsensor);
+    var timestamp = epochToDateTime(jsonData.timestamp);
+
+    // 차트에 값 표시
+    if (data.getNumberOfRows() > maxDatas) {
+    data.removeRows(0, data.getNumberOfRows() - maxDatas);
+    }
+    data.addRow([timestamp, lightsensor]);
+    chart.draw(data, options);
+
+    gauge_data.setValue(0, 0, lightsensor);
+    gauge_chart.draw(gauge_data, options);
+    });
+    }
+    // 에포크 Time을 JavaScript Date 객체로 변환
+    function epochToJsDate(epochTime){
+    return new Date(epochTime*1000);
+    }
+
+    // Time을 사람이 읽을 수 있는 형식 (HH:MM)으로 변환
+    function epochToDateTime(epochTime) {
+    var epochDate = new Date(epochToJsDate(epochTime));
+    var dateTime =
+    ("00" + epochDate.getHours()).slice(-2) +
+    ":" +
+    ("00" + epochDate.getMinutes()).slice(-2);
+    return dateTime;
+    }
+    </script>
+</body>
+</html>
