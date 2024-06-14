@@ -15,6 +15,7 @@ MIDTERM
 FINAL
 =======
 * [ Week 8 SMART DEVICE](https://github.com/john020202/SMART-DEVICE_24/wiki/Week-8-SMART%E2%80%90DEVICE)
+* [ Week 9 SMART DEVICE](https://github.com/john020202/SMART-DEVICE_24/wiki/Week-9-SMART%E2%80%90DEVICE)
 * [ Week 10 SMART DEVICE](https://github.com/john020202/SMART-DEVICE_24/wiki/Week_10-SMART%E2%80%90DEVICE)
 * [ Week 11 SMART DEVICE](https://github.com/john020202/SMART-DEVICE_24/wiki/Week_11-SMART%E2%80%90DEVICE)
 * [ Week 12 SMART DEVICE](https://github.com/john020202/SMART-DEVICE_24/wiki/Week_12-SMART%E2%80%90DEVICE)
