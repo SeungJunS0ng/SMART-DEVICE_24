@@ -20,3 +20,4 @@ FINAL
 * [ Week 12 SMART DEVICE](https://github.com/john020202/SMART-DEVICE_24/wiki/Week_12-SMART%E2%80%90DEVICE)
 * [ Week 13 SMART DEVICE](https://github.com/john020202/SMART-DEVICE_24/wiki/Week_13-SMART%E2%80%90DEVICE)
 * [ Week 14 SMART DEVICE](https://github.com/john020202/SMART-DEVICE_24/wiki/Week_14-SMART%E2%80%90DEVICE)
+* [ Week 15 SMART DEVICE](https://github.com/john020202/SMART-DEVICE_24/wiki/Week_15-SMART%E2%80%90DEVICE)
